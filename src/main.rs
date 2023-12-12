@@ -30,13 +30,9 @@ fn render_tui(cards: Vec<Card>) -> Result<(), io::Error> {
                 }
                 Event::Key(event) => match event.code {
                     KeyCode::Left | KeyCode::Backspace | KeyCode::BackTab => {
-                        if let Some(card) =
-                            cards_iterator
-                                .clone()
-                                .nth(match current_card.0.checked_sub(1) {
-                                    Some(number) => number,
-                                    None => 0,
-                                })
+                        if let Some(card) = cards_iterator
+                            .clone()
+                            .nth(current_card.0.checked_sub(1).unwrap_or(0))
                         {
                             current_card = card;
                         }
@@ -124,7 +120,8 @@ fn render_tui(cards: Vec<Card>) -> Result<(), io::Error> {
 
 fn main() {
     let file = File::open("./test.md").unwrap();
-    let file_buffers = vec![BufReader::new(&file), BufReader::new(&file)];
+    let file2 = File::open("./test2.md").unwrap();
+    let file_buffers = vec![BufReader::new(file), BufReader::new(file2)];
 
     /*let mut segment_vec: Vec<String> = vec![]; INFO: unsure if this will get used in future
 
